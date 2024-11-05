@@ -1,0 +1,84 @@
+-- Create Database (optional in case the Database is not alredy created, else, create it, you canot have a gabinet wishout a wardobe damm it..)
+
+CREATE DATABASE school_db;
+USE school_db;
+
+-- Table 1: Students
+
+CREATE TABLE student (
+    student_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    dob DATE,
+    email VARCHAR(100),
+    phone_number VARCHAR(15),
+    address TEXT
+);
+
+-- Table 2: Subjects
+
+CREATE TABLE subject (
+    subject_id INT AUTO_INCREMENT PRIMARY KEY,
+    subject_name VARCHAR(100) NOT NULL
+);
+
+-- Table 3: Teachers
+
+CREATE TABLE teacher (
+    teacher_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100),
+    phone_number VARCHAR(15),
+    subject_id INT,
+    FOREIGN KEY (subject_id) REFERENCES subject(subject_id)
+);
+
+-- Table 4: Classes
+
+CREATE TABLE classes (
+    class_id INT AUTO_INCREMENT PRIMARY KEY,
+    class_name VARCHAR(100) NOT NULL,
+    teacher_id INT,
+    subject_id INT,
+    FOREIGN KEY (teacher_id) REFERENCES teacher(teacher_id),
+    FOREIGN KEY (subject_id) REFERENCES subject(subject_id)
+);
+
+-- Table 5: Schedules
+
+CREATE TABLE schedules (
+    schedule_id INT AUTO_INCREMENT PRIMARY KEY,
+    class_id INT,
+    day_of_week VARCHAR(20),
+    start_time TIME,
+    end_time TIME,
+    location VARCHAR(100),
+    FOREIGN KEY (class_id) REFERENCES classes(class_id)
+);
+
+-- Table 6: Student-Classes
+
+(Many-to-Many Relationship between Students and Classes)
+CREATE TABLE student_classes (
+    student_id INT,
+    class_id INT,
+    PRIMARY KEY (student_id, class_id),
+    FOREIGN KEY (student_id) REFERENCES student(student_id),
+    FOREIGN KEY (class_id) REFERENCES classes(class_id)
+);
+
+-- Example Inserts for Subjects
+INSERT INTO subject (subject_name) VALUES 
+('Mathematics'),
+('English'),
+('Science'),
+('History'),
+('Geography');
+
+-- Example Inserts for Teachers
+
+INSERT INTO teacher (first_name, last_name, email, phone_number, subject_id) VALUES
+('John', 'Doe', 'john.doe@example.com', '123-456-7890', 1),   -- Mathematics Teacher
+('Jane', 'Smith', 'jane.smith@example.com', '123-456-7891', 2), -- English Teacher
+('Emma', 'Johnson', 'emma.johnson@example.com', '123-456-7892', 3); -- Phisics Teacher
